@@ -6,6 +6,7 @@ Implement functionality to visualise an HLT streamer in a TiKz flowchart.
 @date: 2014-09-06
 """
 
+
 class Operation:
     """ @class Operation
     A helper class that is never instantiated. Only has static methods to check
@@ -61,7 +62,7 @@ class StreamerFlowchart:
         self.prefix = sanitize_prefix(prefix or name)
         self.properties = properties or {}
         self._tikz = None
-    
+
     @property
     def tikz(self):
         """
@@ -77,7 +78,7 @@ class StreamerFlowchart:
         """
         operations = [self._makeTikzNode(op, index)
                       for index, op in enumerate(self.code.split('\n'))]
-        operations = [op for op in operations if op]  # filter out empty strings
+        operations = [op for op in operations if op]  # filter out empty str
         nop = len(operations)
         lines = [self._makeLine(a, b)
                  for a, b in zip(range(nop), range(1, nop))]
@@ -89,7 +90,8 @@ class StreamerFlowchart:
         index is used to order the blocks in the diagram.
 
         @param op the string specifying the operation
-        @param id a number to specify the order of the operation within the flow
+        @param id a number to specify the order of the operation within the
+                  flow
         """
         from .Sanitize import sanitize_for_latex
         op = sanitize_for_latex(op.strip('> '))

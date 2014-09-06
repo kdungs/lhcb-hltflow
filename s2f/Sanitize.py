@@ -6,6 +6,7 @@ A collection of helper functions for sanitizing text.
 @date: 2014-09-06
 """
 
+
 def sanitize_prefix(prefix):
     """
     Sanitizes a prefix to be used for TiKz coordinates.
@@ -17,6 +18,7 @@ def sanitize_prefix(prefix):
     import string as s
     allowed = s.ascii_lowercase + s.digits + '-'
     return ''.join(c for c in prefix.lower() if c in allowed)
+
 
 def sanitize_for_latex(text):
     """
