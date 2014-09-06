@@ -1,6 +1,6 @@
 import unittest
 
-from StreamerFlowchart import StreamerFlowchart
+from s2f.StreamerFlowchart import StreamerFlowchart
 
 
 class TestStreamerFlowchartDefaults(unittest.TestCase):

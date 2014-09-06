@@ -1,6 +1,6 @@
 import unittest
 
-from Sanitize import (
+from s2f.Sanitize import (
     sanitize_prefix,
     sanitize_for_latex
 )

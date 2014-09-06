@@ -1,6 +1,6 @@
 import unittest
 
-from StreamerFlowchart import Operation
+from s2f.StreamerFlowchart import Operation
 
 class TestOperation(unittest.TestCase):
     def testIsCut(self):
