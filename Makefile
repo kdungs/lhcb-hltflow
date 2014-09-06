@@ -3,3 +3,4 @@ test:
 
 clean:
 	rm -f `find . -name '*.pyc'`
+	rm -rf `find . -name '__pycache__'`
