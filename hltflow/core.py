@@ -56,7 +56,7 @@ class StreamerFlowchart:
                           numerical constants in the code; if None defaults to
                           empty dictionary
         """
-        from .Sanitize import sanitize_prefix
+        from .sanitize import sanitize_prefix
         self.name = name
         self.code = code
         self.prefix = sanitize_prefix(prefix or name)
@@ -93,7 +93,7 @@ class StreamerFlowchart:
         @param id a number to specify the order of the operation within the
                   flow
         """
-        from .Sanitize import sanitize_for_latex
+        from .sanitize import sanitize_for_latex
         op = sanitize_for_latex(op.strip('> '))
         if Operation.is_tee(op):
             return ''

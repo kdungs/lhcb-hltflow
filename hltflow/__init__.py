@@ -1,5 +1,5 @@
-from . import Sanitize
-from . import StreamerFlowchart
+from . import core
+from . import sanitize
 
 
 def main():

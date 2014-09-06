@@ -2,7 +2,7 @@
 
 import unittest
 
-from s2f.Sanitize import (
+from hltflow.sanitize import (
     sanitize_prefix,
     sanitize_for_latex
 )

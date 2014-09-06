@@ -1,6 +1,6 @@
 import unittest
 
-from s2f.StreamerFlowchart import Operation
+from hltflow.core import Operation
 
 
 class TestOperation(unittest.TestCase):
