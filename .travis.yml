@@ -1,5 +1,9 @@
 language: python
 python:
-    - "3.3"
-script: 
-    - "python -m unittest discover tests/"
+  - "2.7"
+  - "3.3"
+install:
+  - pip install pep8
+script:
+  - pep8 s2f/
+  - "python -m unittest discover tests/"
