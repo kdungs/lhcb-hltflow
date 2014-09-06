@@ -42,7 +42,7 @@ class TestStreamerFlowchartDefaults(unittest.TestCase):
         self.assertEqual(
             self.sf._makeTikzNode(">>  tee  ( monitor( TC_SIZE > 0, '# pass "
                                   "match', LoKi.Monitoring.ContextSvc ) )", 4),
-            ''        
+            ''
         )
 
     def testMakeLine(self):

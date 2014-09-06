@@ -1,4 +1,4 @@
-#coding=utf-8
+# coding=utf-8
 
 import unittest
 
@@ -6,6 +6,7 @@ from s2f.Sanitize import (
     sanitize_prefix,
     sanitize_for_latex
 )
+
 
 class TestSanitize(unittest.TestCase):
     """ Test case for the Sanitize module """

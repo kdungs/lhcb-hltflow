@@ -2,6 +2,7 @@ import unittest
 
 from s2f.StreamerFlowchart import Operation
 
+
 class TestOperation(unittest.TestCase):
     def testIsCut(self):
         self.assertTrue(Operation.is_cut(
