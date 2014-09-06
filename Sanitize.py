@@ -18,7 +18,7 @@ def sanitize_prefix(prefix):
     allowed = s.ascii_lowercase + s.digits + '-'
     return ''.join(c for c in prefix.lower() if c in allowed)
 
-def latex_sanitize(text):
+def sanitize_for_latex(text):
     """
     Sanitze text for use within LaTeX.
     Espace LaTeX special characters in order to prevent errors.

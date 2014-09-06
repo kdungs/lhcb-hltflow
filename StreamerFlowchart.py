@@ -28,6 +28,13 @@ class Operation:
         """
         return op.startswith('SINK')
 
+    @staticmethod
+    def is_tee(op):
+        """
+        @return whether an operation is a call to tee
+        """
+        return op.startswith('tee')
+
 
 class StreamerFlowchart:
     """ @class StreamerFlowchart
@@ -70,6 +77,7 @@ class StreamerFlowchart:
         """
         operations = [self._makeTikzNode(op, index)
                       for index, op in enumerate(self.code.split('\n'))]
+        operations = [op for op in operations if op]  # filter out empty strings
         nop = len(operations)
         lines = [self._makeLine(a, b)
                  for a, b in zip(range(nop), range(1, nop))]
@@ -83,7 +91,10 @@ class StreamerFlowchart:
         @param op the string specifying the operation
         @param id a number to specify the order of the operation within the flow
         """
-        op = op.strip('> ')
+        from Sanitize import sanitize_for_latex
+        op = sanitize_for_latex(op.strip('> '))
+        if Operation.is_tee(op):
+            return ''
         style = 'block'
         for name, checker in {
             'cut': Operation.is_cut,

@@ -1,0 +1,5 @@
+[{
+  "name": "Hlt1SingleMuon",
+  "code": "VeloCandidates\n>>  MatchVeloMuon\n>>  ( ( TrIDC('isVelo') > %(Velo_NHits)s ) & ( TrNVELOMISS < %(Velo_Qcut)s )  )\n>>  tee  ( monitor( TC_SIZE > 0, '# pass match', LoKi.Monitoring.ContextSvc ) )\n>>  tee  ( monitor( TC_SIZE    , 'nMatched' , LoKi.Monitoring.ContextSvc ) )\n>>  LooseForward\n>>  (TrTNORMIDC > %(TrNTHits)s )\n>>  tee  ( monitor( TC_SIZE > 0, '# pass forward', LoKi.Monitoring.ContextSvc ) )\n>>  tee  ( monitor( TC_SIZE , 'nForward' , LoKi.Monitoring.ContextSvc ) )\n>>  ( ( TrPT > %(PT)s * MeV ) & ( TrP  > %(P)s  * MeV ) )\n>>  IsMuon\n>>  tee  ( monitor( TC_SIZE > 0, '# pass IsMuon', LoKi.Monitoring.ContextSvc ) )\n>>  tee  ( monitor( TC_SIZE , 'nIsMuon' , LoKi.Monitoring.ContextSvc ) )\n>>  FitTrack\n>>  tee  ( monitor( TC_SIZE > 0, '# pass fit', LoKi.Monitoring.ContextSvc ) )\n>>  tee  ( monitor( TC_SIZE , 'nFitted' , LoKi.Monitoring.ContextSvc ) )\n>>  ( TrCHI2PDOF < %(TrChi2)s )\n>>  SINK( 'Hlt1%(name)sDecision' )\n>> ~TC_EMPTY\n"
+}]
+

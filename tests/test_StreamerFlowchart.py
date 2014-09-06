@@ -37,7 +37,12 @@ class TestStreamerFlowchartDefaults(unittest.TestCase):
         self.assertEqual(
             self.sf._makeTikzNode(">>  SINK( 'Hlt1%(name)sDecision' )", 3),
             r"\node [block, sink, below=of test1-2] (test1-3) "
-             "{SINK( 'Hlt1%(name)sDecision' )};"
+            r"{SINK( 'Hlt1\%(name)sDecision' )};"
+        )
+        self.assertEqual(
+            self.sf._makeTikzNode(">>  tee  ( monitor( TC_SIZE > 0, '# pass "
+                                  "match', LoKi.Monitoring.ContextSvc ) )", 4),
+            ''        
         )
 
     def testMakeLine(self):
