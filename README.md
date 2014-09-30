@@ -1,4 +1,5 @@
-lhcb-hlt-streamer-to-flowchart
-==============================
+# lhcb-hltflow
 
-A tool that automatically produces TiKz-based flowcharts for HLT streamers.
+![Travis CI Build Status](https://magnum.travis-ci.com/kdungs/lhcb-hlt-streamer-to-flowchart.svg?token=rpT1cDjdFw8XdBwsBw31&branch=development/refactoring)
+
+A tool that automatically produces TikZ-based flowcharts for HLT1 streamers.
