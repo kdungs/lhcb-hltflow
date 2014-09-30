@@ -7,7 +7,7 @@ Implement functionality to visualise an HLT streamer in a TiKz flowchart.
 """
 
 
-class Operation:
+class Operation(object):
     """ @class Operation
     A helper class that is never instantiated. Only has static methods to check
     for different kinds of operations.
@@ -37,7 +37,7 @@ class Operation:
         return op.startswith('tee')
 
 
-class StreamerFlowchart:
+class StreamerFlowchart(object):
     """ @class StreamerFlowchart
     Implement the structure for a flowchart.
     """
