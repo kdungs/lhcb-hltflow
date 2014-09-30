@@ -1,60 +1,59 @@
-"""
-Implement functionality to visualise an HLT streamer in a TiKz flowchart.
+""" @file core.py
+    Implement functionality to visualise an HLT streamer in a TiKz flowchart.
 
-@author: Kevin Dungs <kevin.dungs@cern.ch>
-@version: 0.1.0
-@date: 2014-09-06
+    @author: Kevin Dungs <kevin.dungs@cern.ch>
+    @version: 0.1.0
+    @date: 2014-09-06
 """
 
 
 class Operation(object):
     """ @class Operation
-    A helper class that is never instantiated. Only has static methods to check
-    for different kinds of operations.
+        A helper class that is never instantiated. Only has static methods to
+        check for different kinds of operations.
     """
 
     @staticmethod
     def is_cut(op):
         """
-        @return whether an operation is a cut (i.e. starts with an opening
-                parenthesis)
+            @return whether an operation is a cut (i.e. starts with an opening
+                    parenthesis)
         """
         return op.startswith('(')
 
     @staticmethod
     def is_sink(op):
         """
-        @return whether an operation is a call to sink (i.e. starts with the
-                keyword SINK)
+            @return whether an operation is a call to sink (i.e. starts with the
+                    keyword SINK)
         """
         return op.startswith('SINK')
 
     @staticmethod
     def is_tee(op):
         """
-        @return whether an operation is a call to tee
+            @return whether an operation is a call to tee
         """
         return op.startswith('tee')
 
 
 class StreamerFlowchart(object):
     """ @class StreamerFlowchart
-    Implement the structure for a flowchart.
+        Implement the structure for a flowchart.
     """
     nodestring = r'\node [{style}] ({prefix}-{index}) {{{op}}};'
     linestring = r'\path [line] ({prefix}-{source}) -- ({prefix}-{target});'
 
     def __init__(self, name, code, prefix=None, properties=None):
         """
-        Constructor.
+            Initialise a new StreamerFlowchart object with given name and code
+            block.
 
-        @param name the streamer's name
-        @param code the code specified in the streamer
-        @param prefix the prefix used in the TiKz code; if None it defaults to
-                      a sanitized version of name
-        @param properties dictionary of properties used for formatting the
-                          numerical constants in the code; if None defaults to
-                          empty dictionary
+            @param name the streamer's name
+            @param code the code block describing the streamer
+            @param prefix an optional prefix used for naming TikZ coordinates
+            @param properties an optional dictionary containing values for
+                   variables in the code block
         """
         from .sanitize import sanitize_prefix
         self.name = name
@@ -66,8 +65,11 @@ class StreamerFlowchart(object):
     @property
     def tikz(self):
         """
-        @return the generated TiKz code for this streamer; the TiKz code is
-                generated on demand and then cached for future reference
+            Getter for the generated TikZ code representing the streamer.
+            An internal variable is used to cache the value so the code is
+            generated on demand and only once.
+
+            @return TikZ code representing the streamer's flow
         """
         if self._tikz is None:
             self._tikz = self.generateTikz()
@@ -75,6 +77,12 @@ class StreamerFlowchart(object):
 
     def generateTikz(self):
         """
+            Generate TikZ code for this streamer.
+            This method is used internally and should (for performance reasons)
+            not be called manually. Use the StreamerFlowchart.tikz property
+            instead.
+
+            @return generated TikZ code representing the streamer's flow
         """
         operations = [self._makeTikzNode(op, index)
                       for index, op in enumerate(self.code.split('\n'))]
@@ -86,12 +94,12 @@ class StreamerFlowchart(object):
 
     def _makeTikzNode(self, op, index):
         """
-        Transform a string defining an operation into a TiKz node. The given
-        index is used to order the blocks in the diagram.
+            Transform a string defining an operation into a TiKz node. The
+            given index is used to order the blocks in the diagram.
 
-        @param op the string specifying the operation
-        @param id a number to specify the order of the operation within the
-                  flow
+            @param op the string specifying the operation
+            @param id a number to specify the order of the operation within the
+                      flow
         """
         from .sanitize import sanitize_for_latex
         op = sanitize_for_latex(op.strip('> '))

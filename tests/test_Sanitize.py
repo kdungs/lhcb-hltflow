@@ -9,17 +9,24 @@ from hltflow.sanitize import (
 
 
 class TestSanitize(unittest.TestCase):
-    """ Test case for the Sanitize module """
+    """
+        Test case for the Sanitize module
+    """
+    
     def testSanitizePrefix(self):
-        """ The function sanitize_prefix should only allow for lower case ASCII
-        letters, digits and the hyphen. Upper case letters are supposed to be
-        converted to lower case, everything else is supposed to be omitted.
+        """
+            The function sanitize_prefix should only allow for lower case ASCII
+            letters, digits and the hyphen. Upper case letters are supposed to
+            be converted to lower case, everything else is supposed to be
+            omitted.
         """
         self.assertEqual(sanitize_prefix('_. Testü@# - .5$ç§÷≠0π00'),
                          'test-5000')
 
     def testSanitizeForLatex(self):
-        """ LaTeX special characters are supposed to be escaped. """
+        """
+            LaTeX special characters are supposed to be escaped.
+        """
         self.assertEqual(sanitize_for_latex('I am 100% certain!'),
                          r'I am 100\% certain!')
         self.assertEqual(sanitize_for_latex('Toto & Harry'),
