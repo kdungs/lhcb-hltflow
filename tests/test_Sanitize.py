@@ -12,7 +12,7 @@ class TestSanitize(unittest.TestCase):
     """
         Test case for the Sanitize module
     """
-    
+
     def testSanitizePrefix(self):
         """
             The function sanitize_prefix should only allow for lower case ASCII

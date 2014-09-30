@@ -24,8 +24,8 @@ class Operation(object):
     @staticmethod
     def is_sink(op):
         """
-            @return whether an operation is a call to sink (i.e. starts with the
-                    keyword SINK)
+            @return whether an operation is a call to sink (i.e. starts with
+                    the keyword SINK)
         """
         return op.startswith('SINK')
 

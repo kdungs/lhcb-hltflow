@@ -12,14 +12,14 @@ class TestStreamerFlowchartDefaults(unittest.TestCase):
 
     def testProperties(self):
         """
-            If no properties parameter is supplied to the constructor the 
+            If no properties parameter is supplied to the constructor the
             attribute should default to empty dict.
         """
         self.assertDictEqual(self.sf.properties, {})
 
     def testPrefix(self):
         """
-            If no prefix is specified, it defaults to a lowercase stripped 
+            If no prefix is specified, it defaults to a lowercase stripped
             version of the name.
         """
         self.assertEqual(self.sf.prefix, 'test1')
