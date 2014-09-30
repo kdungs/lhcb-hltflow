@@ -13,13 +13,10 @@ class TestStreamerFlowchartOnFile(unittest.TestCase):
         with open('tests/data/code.txt') as f:
             self.sf = StreamerFlowchart('Test', f.read())
         with open('tests/data/code_result.txt') as f:
-            self.expected = f.read()
+            self.expected = f.read()[:-1]  # don't want the empty line
 
-    def testMakeTikzLong(self):
+    def testMakeTikzOnFile(self):
         """
             Test whether StreamerFlowchart.tikz works on a real example.
-            TestCase.assertMultilineEqual does not seem to work properly or
-            there are empty lines that we can't measure.
         """
-        for t, e in zip(self.sf.tikz.split('\n'), self.expected.split('\n')):
-            self.assertEqual(t, e)
+        self.assertMultiLineEqual(self.expected, self.sf.tikz)
