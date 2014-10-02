@@ -9,16 +9,11 @@ Welcome to LHCb HLT Flow's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+  :maxdepth: 2
 
-.. automodule:: hltflow.core
-   :members:
-   :show-inheritance:   
-.. automodule:: hltflow.latex
-   :members:
-.. automodule:: hltflow.sanitize
-   :members:
-
+  core
+  latex
+  sanitize
 
 
 Indices and tables
