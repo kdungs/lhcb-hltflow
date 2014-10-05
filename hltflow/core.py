@@ -2,8 +2,8 @@
     Implement functionality to visualise an HLT streamer in a TiKz flowchart.
 
     @author: Kevin Dungs <kevin.dungs@cern.ch>
-    @version: 0.1.0
-    @date: 2014-09-06
+    @version: 1.0.0
+    @date: 2014-10-05
 """
 
 
@@ -36,6 +36,13 @@ class Operation(object):
         """
         return op.startswith('tee')
 
+    @staticmethod
+    def is_op(op):
+        """
+            @return true if op does not show in flowchart
+        """
+        return not Operation.is_tee(op)
+
 
 class StreamerFlowchart(object):
     """ @class StreamerFlowchart
@@ -44,7 +51,7 @@ class StreamerFlowchart(object):
     nodestring = r'\node [{style}] ({prefix}-{index}) {{{op}}};'
     linestring = r'\path [line] ({prefix}-{source}) -- ({prefix}-{target});'
 
-    def __init__(self, name, code, prefix=None, properties=None):
+    def __init__(self, name, code, prefix=None):
         """
             Initialise a new StreamerFlowchart object with given name and code
             block.
@@ -52,14 +59,11 @@ class StreamerFlowchart(object):
             @param name the streamer's name
             @param code the code block describing the streamer
             @param prefix an optional prefix used for naming TikZ coordinates
-            @param properties an optional dictionary containing values for
-                   variables in the code block
         """
         from .sanitize import sanitize_prefix
         self.name = name
         self.code = code
         self.prefix = sanitize_prefix(prefix or name)
-        self.properties = properties or {}
         self._tikz = None
 
     @property
@@ -84,13 +88,15 @@ class StreamerFlowchart(object):
 
             @return generated TikZ code representing the streamer's flow
         """
-        operations = [self._makeTikzNode(op, index)
-                      for index, op in enumerate(self.code.split('\n'))]
-        operations = [op for op in operations if op]  # filter out empty str
-        nop = len(operations)
+        import re
+        ops = re.split(r'\s*>>\s*', self.code)
+        ops = (op.strip() for op in ops)
+        ops = (op for op in ops if Operation.is_op(op))
+        ops = [self._makeTikzNode(op, index) for index, op in enumerate(ops)]
+        nop = len(ops)
         lines = [self._makeLine(a, b)
                  for a, b in zip(range(nop), range(1, nop))]
-        return '\n'.join(operations + lines)
+        return '\n'.join(ops + lines)
 
     def _makeTikzNode(self, op, index):
         """
@@ -102,9 +108,7 @@ class StreamerFlowchart(object):
                       flow
         """
         from .sanitize import sanitize_for_latex
-        op = sanitize_for_latex(op.strip('> '))
-        if Operation.is_tee(op):
-            return ''
+        op = sanitize_for_latex(op)
         style = 'block'
         for name, checker in {
             'cut': Operation.is_cut,
@@ -122,6 +126,10 @@ class StreamerFlowchart(object):
 
     def _makeLine(self, source, target):
         """
+            Build a line between two given coordinates.
+
+            @param source index of the start of the line
+            @param target index of the line's end
         """
         return self.linestring.format(prefix=self.prefix, source=source,
                                       target=target)
