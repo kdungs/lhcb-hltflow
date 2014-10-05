@@ -4,15 +4,14 @@
     \node [start] (test-0) {VeloCandidates};
     \node [block, below=of test-0] (test-1) {MatchVeloMuon};
     \node [block, cut, below=of test-1] (test-2) {( ( TrIDC('isVelo') > \%(Velo\_NHits)s ) \& ( TrNVELOMISS < \%(Velo\_Qcut)s )  )};
-    \node [block, below=of test-4] (test-5) {LooseForward};
-    \node [block, cut, below=of test-5] (test-6) {(TrTNORMIDC > \%(TrNTHits)s )};
-    \node [block, cut, below=of test-8] (test-9) {( ( TrPT > \%(PT)s * MeV ) \& ( TrP  > \%(P)s  * MeV ) )};
-    \node [block, below=of test-9] (test-10) {IsMuon};
-    \node [block, below=of test-12] (test-13) {FitTrack};
-    \node [block, cut, below=of test-15] (test-16) {( TrCHI2PDOF < \%(TrChi2)s )};
-    \node [block, sink, below=of test-16] (test-17) {SINK( 'Hlt1\%(name)sDecision' )};
-    \node [block, below=of test-17] (test-18) {\~TC\_EMPTY};
-    \node [block, below=of test-18] (test-19) {};
+    \node [block, below=of test-2] (test-3) {LooseForward};
+    \node [block, cut, below=of test-3] (test-4) {(TrTNORMIDC > \%(TrNTHits)s )};
+    \node [block, cut, below=of test-4] (test-5) {( ( TrPT > \%(PT)s * MeV ) \& ( TrP  > \%(P)s  * MeV ) )};
+    \node [block, below=of test-5] (test-6) {IsMuon};
+    \node [block, below=of test-6] (test-7) {FitTrack};
+    \node [block, cut, below=of test-7] (test-8) {( TrCHI2PDOF < \%(TrChi2)s )};
+    \node [block, sink, below=of test-8] (test-9) {SINK( 'Hlt1\%(name)sDecision' )};
+    \node [block, below=of test-9] (test-10) {\~TC\_EMPTY};
     \path [line] (test-0) -- (test-1);
     \path [line] (test-1) -- (test-2);
     \path [line] (test-2) -- (test-3);
@@ -23,7 +22,6 @@
     \path [line] (test-7) -- (test-8);
     \path [line] (test-8) -- (test-9);
     \path [line] (test-9) -- (test-10);
-    \path [line] (test-10) -- (test-11);
   \end{tikzpicture}
   \caption{Flowchart of Test}
 \end{figure}

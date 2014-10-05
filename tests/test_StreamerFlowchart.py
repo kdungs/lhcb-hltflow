@@ -8,14 +8,7 @@ class TestStreamerFlowchartDefaults(unittest.TestCase):
         """
             Instantiate a test fixture.
         """
-        self.sf = StreamerFlowchart('Test % 1', 'SomeCode')
-
-    def testProperties(self):
-        """
-            If no properties parameter is supplied to the constructor the
-            attribute should default to empty dict.
-        """
-        self.assertDictEqual(self.sf.properties, {})
+        self.sf = StreamerFlowchart('Test % 1', 'SomeCode >> SomeMoreCode')
 
     def testPrefix(self):
         """
@@ -30,40 +23,40 @@ class TestStreamerFlowchartDefaults(unittest.TestCase):
         """
         # Start
         self.assertEqual(
-            self.sf._makeTikzNode('Start', 0),
-            r'\node [start] (test1-0) {Start};'
+            r'\node [start] (test1-0) {Start};',
+            self.sf._makeTikzNode('Start', 0)
         )
         # Tool
         self.assertEqual(
-            self.sf._makeTikzNode('>>  Something', 1),
-            r'\node [block, below=of test1-0] (test1-1) {Something};'
+            r'\node [block, below=of test1-0] (test1-1) {Something};',
+            self.sf._makeTikzNode('Something', 1)
         )
         # Cut
         self.assertEqual(
-            self.sf._makeTikzNode('>>  ( X > 500 * MeV )', 2),
             r'\node [block, cut, below=of test1-1] (test1-2) '
-            '{( X > 500 * MeV )};'
+            '{( X > 500 * MeV )};',
+            self.sf._makeTikzNode('( X > 500 * MeV )', 2)
         )
         # Sink
         self.assertEqual(
-            self.sf._makeTikzNode(">>  SINK( 'Hlt1%(name)sDecision' )", 3),
             r"\node [block, sink, below=of test1-2] (test1-3) "
-            r"{SINK( 'Hlt1\%(name)sDecision' )};"
+            r"{SINK( 'Hlt1\%(name)sDecision' )};",
+            self.sf._makeTikzNode("SINK( 'Hlt1%(name)sDecision' )", 3)
         )
         # Logging (not included in flowchart)
-        self.assertEqual(
-            self.sf._makeTikzNode(">>  tee  ( monitor( TC_SIZE > 0, '# pass "
-                                  "match', LoKi.Monitoring.ContextSvc ) )", 4),
-            ''
-        )
+        #self.assertEqual(
+        #    self.sf._makeTikzNode("tee  ( monitor( TC_SIZE > 0, '# pass "
+        #                          "match', LoKi.Monitoring.ContextSvc ) )", 4),
+        #    ''
+        #)
 
     def testMakeLine(self):
         """
             Test the basic functionality of StreamerFlowchart._makeLine.
         """
         self.assertEqual(
-            self.sf._makeLine(0, 1),
-            r'\path [line] (test1-0) -- (test1-1);'
+            r'\path [line] (test1-0) -- (test1-1);',
+            self.sf._makeLine(0, 1)
         )
 
     def testTikz(self):
@@ -73,4 +66,10 @@ class TestStreamerFlowchartDefaults(unittest.TestCase):
             A more detailed example can be found in
             test_StreamerFlowchartOnFile.py
         """
-        self.assertEqual(self.sf.tikz, r'\node [start] (test1-0) {SomeCode};')
+        print(self.sf.tikz)
+        self.assertMultiLineEqual(
+            r'''\node [start] (test1-0) {SomeCode};
+\node [block, below=of test1-0] (test1-1) {SomeMoreCode};
+\path [line] (test1-0) -- (test1-1);''',
+            self.sf.tikz
+        )
