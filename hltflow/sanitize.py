@@ -1,9 +1,9 @@
-""" @file sanitize.py
+"""
     A collection of helper functions for sanitizing text.
 
     @author: Kevin Dungs <kevin.dungs@cern.ch>
-    @version: 0.1.0
-    @date: 2014-09-06
+    @version: 1.0.0
+    @date: 2014-10-05
 """
 
 

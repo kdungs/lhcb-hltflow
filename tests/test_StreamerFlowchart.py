@@ -43,12 +43,6 @@ class TestStreamerFlowchartDefaults(unittest.TestCase):
             r"{SINK( 'Hlt1\%(name)sDecision' )};",
             self.sf._makeTikzNode("SINK( 'Hlt1%(name)sDecision' )", 3)
         )
-        # Logging (not included in flowchart)
-        #self.assertEqual(
-        #    self.sf._makeTikzNode("tee  ( monitor( TC_SIZE > 0, '# pass "
-        #                          "match', LoKi.Monitoring.ContextSvc ) )", 4),
-        #    ''
-        #)
 
     def testMakeLine(self):
         """

@@ -1,4 +1,4 @@
-""" @file core.py
+"""
     Implement functionality to visualise an HLT streamer in a TiKz flowchart.
 
     @author: Kevin Dungs <kevin.dungs@cern.ch>
