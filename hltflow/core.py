@@ -1,64 +1,46 @@
-"""
-    Implement functionality to visualise an HLT streamer in a TiKz flowchart.
-
-    @author: Kevin Dungs <kevin.dungs@cern.ch>
-    @version: 1.0.0
-    @date: 2014-10-05
+""" Implement functionality to visualise an HLT streamer in a TiKz flowchart.
 """
 
 
 class Operation(object):
-    """ @class Operation
-        A helper class that is never instantiated. Only has static methods to
-        check for different kinds of operations.
+    """ A helper class that is never instantiated. Only has static methods to
+    check for different kinds of operations.
     """
 
     @staticmethod
     def is_cut(op):
-        """
-            @return whether an operation is a cut (i.e. starts with an opening
-                    parenthesis)
+        """ Checks whether an operation is a cut (i.e. starts with an opening
+        parenthesis).
         """
         return op.startswith('(')
 
     @staticmethod
     def is_sink(op):
-        """
-            @return whether an operation is a call to sink (i.e. starts with
-                    the keyword SINK)
+        """ Checks whether an operation is a call to sink (i.e. starts with the
+        keyword SINK).
         """
         return op.startswith('SINK')
 
     @staticmethod
     def is_tee(op):
-        """
-            @return whether an operation is a call to tee
-        """
+        """ Check whether an operation is a call to tee. """
         return op.startswith('tee')
 
     @staticmethod
     def is_op(op):
-        """
-            @return true if op does not show in flowchart
-        """
+        """ Checks whether op is supposed to show up in the flowchart. """
         return not Operation.is_tee(op)
 
 
 class StreamerFlowchart(object):
-    """ @class StreamerFlowchart
-        Implement the structure for a flowchart.
-    """
+    """ Implement the structure for a flowchart. """
     nodestring = r'\node [{style}] ({prefix}-{index}) {{{op}}};'
     linestring = r'\path [line] ({prefix}-{source}) -- ({prefix}-{target});'
 
     def __init__(self, name, code, prefix=None):
-        """
-            Initialise a new StreamerFlowchart object with given name and code
-            block.
-
-            @param name the streamer's name
-            @param code the code block describing the streamer
-            @param prefix an optional prefix used for naming TikZ coordinates
+        """ Initialises a new StreamerFlowchart object with given name and code
+        block. An optional prefix can be supplied otherwise a sanitized version
+        of name is used.
         """
         from .sanitize import sanitize_prefix
         self.name = name
@@ -68,25 +50,21 @@ class StreamerFlowchart(object):
 
     @property
     def tikz(self):
-        """
-            Getter for the generated TikZ code representing the streamer.
+        """ Getter for the generated TikZ code representing the streamer.
+
             An internal variable is used to cache the value so the code is
             generated on demand and only once.
-
-            @return TikZ code representing the streamer's flow
         """
         if self._tikz is None:
             self._tikz = self.generateTikz()
         return self._tikz
 
     def generateTikz(self):
-        """
-            Generate TikZ code for this streamer.
+        """ Generates TikZ code for this streamer.
+
             This method is used internally and should (for performance reasons)
             not be called manually. Use the StreamerFlowchart.tikz property
             instead.
-
-            @return generated TikZ code representing the streamer's flow
         """
         import re
         ops = re.split(r'\s*>>\s*', self.code)
@@ -99,13 +77,8 @@ class StreamerFlowchart(object):
         return '\n'.join(ops + lines)
 
     def _makeTikzNode(self, op, index):
-        """
-            Transform a string defining an operation into a TiKz node. The
-            given index is used to order the blocks in the diagram.
-
-            @param op the string specifying the operation
-            @param id a number to specify the order of the operation within the
-                      flow
+        """ Transforms a string defining an operation into a TiKz node. The
+        given index is used to order the blocks in the diagram.
         """
         from .sanitize import sanitize_for_latex
         op = sanitize_for_latex(op)
@@ -125,11 +98,6 @@ class StreamerFlowchart(object):
                                       index=index, op=op)
 
     def _makeLine(self, source, target):
-        """
-            Build a line between two given coordinates.
-
-            @param source index of the start of the line
-            @param target index of the line's end
-        """
+        """ Builds a line between two given coordinates. """
         return self.linestring.format(prefix=self.prefix, source=source,
                                       target=target)
