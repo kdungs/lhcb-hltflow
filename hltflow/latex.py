@@ -12,14 +12,7 @@ FIGURE = r'''\begin{{figure}}
 \end{{figure}}'''
 
 DOCUMENT = r'''\documentclass{{scrartcl}}
-
-\usepackage{{fontspec}}
-\usepackage{{tikz}}
-  \usetikzlibrary{{shapes, arrows, positioning}}
-\usepackage{{xcolor}}
-
-\input{{colors}}
-\input{{tikzstyles}}
+\input{{flow}}
 
 \begin{{document}}
 
@@ -37,7 +30,7 @@ def indent(spaces, multilinestring):
     return '\n{}'.format(indentation).join(multilinestring.split('\n'))
 
 
-def make_figure(sf, tikzoptions='node distance=.75cm and 2.75cm'):
+def make_figure(sf, tikzoptions=''):
     """ Generates a LaTeX figure from a given hltflow.core.StreamerFlowchart.
     Additionally, tikzoptions can be supplied manually.
     """

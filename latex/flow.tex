@@ -1,0 +1,62 @@
+\usepackage{fontspec}
+
+\usepackage{tikz}
+\usetikzlibrary{
+  calc,
+  positioning,
+  shapes,
+  shapes.arrows,
+  shapes.geometric
+}
+
+\usepackage{xcolor}
+\definecolor{Blue}{HTML}{348ABD}
+\definecolor{Purple}{HTML}{7A68A6}
+\definecolor{Red}{HTML}{A60628}
+\definecolor{Green}{HTML}{467821}
+\definecolor{Light red}{HTML}{CF4457}
+\definecolor{Teal}{HTML}{188487}
+\definecolor{Dark orange}{HTML}{E24A33}
+\definecolor{Green TU}{rgb}{0.52 0.72 0.09}
+
+\colorlet{Source}{Green TU}
+\colorlet{Op}{Blue}
+\colorlet{Cut}{Dark orange}
+\colorlet{Sink}{Green}
+
+\tikzset{
+  block/.style = {
+    rectangle,
+    text width=10cm,
+    text centered,
+    minimum height=1cm,
+    inner sep=1em,
+  },
+  source/.style = {
+    fill=Source,
+    draw=Source,
+    text=white,
+    font=\bfseries
+  },
+  op/.style = {
+    fill=Op,
+    draw=Op,
+    text=white
+  },
+  cut/.style = {
+    fill=Cut,
+    draw=Cut,
+    text=white
+  },
+  sink/.style = {
+    fill=Sink,
+    draw=Sink,
+    text=white,
+    font=\bfseries
+  }
+}
+
+\def\connect#1#2#3#4{
+  \draw [draw=#3, fill=#3] (#1.south west) -- ($(#1.south)!0.5!(#2.north)$) -- (#1.south east) -- cycle;
+  \fill [fill=#4] (#1.south west) -- (#2.north west) -- (#2.north east) -- (#1.south east) -- ($(#1.south)!0.5!(#2.north)$) -- cycle;
+}

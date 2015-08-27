@@ -1,41 +1,62 @@
 """ Implement functionality to visualise an HLT streamer in a TiKz flowchart.
 """
 
+from enum import (
+    Enum,
+    unique
+)
 
-class Operation(object):
-    """ A helper class that is never instantiated. Only has static methods to
-    check for different kinds of operations.
-    """
+@unique
+class Operation(Enum):
+    NOOP = (None, None)
+    OP = ('block, op', 'Op')
+    SOURCE = ('block, source', 'Source')
+    CUT = ('block, cut', 'Cut')
+    SINK = ('block, sink', 'Sink')
+
+    def __init__(self, style, color):
+        self.style = style
+        self.color = color
 
     @staticmethod
-    def is_cut(op):
+    def is_cut(opstr):
         """ Checks whether an operation is a cut (i.e. starts with an opening
         parenthesis).
         """
-        return op.startswith('(')
+        return opstr.startswith('(')
 
     @staticmethod
-    def is_sink(op):
+    def is_sink(opstr):
         """ Checks whether an operation is a call to sink (i.e. starts with the
         keyword SINK).
         """
-        return op.startswith('SINK')
+        return opstr.startswith('SINK')
 
     @staticmethod
-    def is_tee(op):
+    def is_tee(opstr):
         """ Check whether an operation is a call to tee. """
-        return op.startswith('tee')
+        return opstr.startswith('tee')
 
     @staticmethod
-    def is_op(op):
-        """ Checks whether op is supposed to show up in the flowchart. """
-        return not Operation.is_tee(op)
+    def is_op(opstr):
+        """ Checks whether opstr is supposed to show up in the flowchart. """
+        return not Operation.is_tee(opstr) and not opstr == '~TC_EMPTY'
+
+    @staticmethod
+    def parse_op(opstr):
+        if not Operation.is_op(opstr):
+            return Operation.NOOP
+        if Operation.is_cut(opstr):
+            return Operation.CUT
+        if Operation.is_sink(opstr):
+            return Operation.SINK
+        return Operation.OP
 
 
 class StreamerFlowchart(object):
     """ Implement the structure for a flowchart. """
-    nodestring = r'\node [{style}] ({prefix}-{index}) {{{op}}};'
-    linestring = r'\path [line] ({prefix}-{source}) -- ({prefix}-{target});'
+    nodestring = r'\node [{style}] ({prefix}-{index}) {{{opstr}}};'
+    connectstring = r'\connect{{{prefix}-{source}}}{{{prefix}-{target}}}{{{sourcecolor}}}{{{targetcolor}}}'
 
     def __init__(self, name, code, prefix=None):
         """ Initialises a new StreamerFlowchart object with given name and code
@@ -68,36 +89,37 @@ class StreamerFlowchart(object):
         """
         import re
         ops = re.split(r'\s*>>\s*', self.code)
-        ops = (op.strip() for op in ops)
-        ops = (op for op in ops if Operation.is_op(op))
-        ops = [self._makeTikzNode(op, index) for index, op in enumerate(ops)]
-        nop = len(ops)
-        lines = [self._makeLine(a, b)
-                 for a, b in zip(range(nop), range(1, nop))]
-        return '\n'.join(ops + lines)
+        ops = (opstr.strip() for opstr in ops)
+        ops = ((opstr, Operation.parse_op(opstr)) for opstr in ops)
+        ops = ((opstr, op) for (opstr, op) in ops if op is not Operation.NOOP)
+        ops = [(index, opstr, op) for index, (opstr, op) in enumerate(ops)]
+        ops[0] = (ops[0][0], ops[0][1], Operation.SOURCE)
+        nodes = [self._makeTikzNode(index, opstr, op)
+                 for index, opstr, op in ops]
+        connects = [self._connect(a, b)
+                    for a, b in zip(ops, ops[1:])]
+        return '\n'.join(nodes + connects)
 
-    def _makeTikzNode(self, op, index):
+    def _makeTikzNode(self, index, opstr, op):
         """ Transforms a string defining an operation into a TiKz node. The
         given index is used to order the blocks in the diagram.
         """
         from .sanitize import sanitize_for_latex
-        op = sanitize_for_latex(op)
-        style = 'block'
-        for name, checker in {
-            'cut': Operation.is_cut,
-            'sink': Operation.is_sink
-        }.items():
-            if checker(op):
-                style += ', {}'.format(name)
-        if index == 0:
-            style = 'start'
-        else:
-            style += ', below=of {prefix}-{prev}'.format(prefix=self.prefix,
-                                                         prev=index - 1)
+        opstr = sanitize_for_latex(opstr)
+        style = op.style
+        if op is not Operation.SOURCE:
+            style += ', below=of {}-{}'.format(self.prefix, index - 1)
         return self.nodestring.format(style=style, prefix=self.prefix,
-                                      index=index, op=op)
+                                      index=index, opstr=opstr)
 
-    def _makeLine(self, source, target):
-        """ Builds a line between two given coordinates. """
-        return self.linestring.format(prefix=self.prefix, source=source,
-                                      target=target)
+    def _connect(self, source, target):
+        """ Builds a connection between two given operations. """
+        sindex, _, sop = source
+        tindex, _, top = target
+        return self.connectstring.format(
+            prefix=self.prefix,
+            source=sindex,
+            target=tindex,
+            sourcecolor=sop.color,
+            targetcolor=top.color
+        )
