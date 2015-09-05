@@ -18,3 +18,10 @@ def sanitize_for_latex(text):
     escape = '%_&~'
     replacers = (lambda s: s.replace(e, r'\{}'.format(e)) for e in escape)
     return reduce(lambda s, f: f(s), replacers, text)
+
+def sanitize_code(code):
+    """ Remove unnecessary whitespace in code. """
+    import re
+    code = code.replace('( ', '(')).replace(' )', ')')
+    code = re.replace(r'\s+', '', code)
+    return code
