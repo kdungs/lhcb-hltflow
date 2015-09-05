@@ -2,12 +2,11 @@
 
 \usepackage{tikz}
 \usetikzlibrary{
-  calc,
+  arrows,
   positioning,
-  shapes,
-  shapes.arrows,
-  shapes.geometric
+  shapes
 }
+\usepackage{varwidth}
 
 \usepackage{xcolor}
 \definecolor{Blue}{HTML}{348ABD}
@@ -19,44 +18,53 @@
 \definecolor{Dark orange}{HTML}{E24A33}
 \definecolor{Green TU}{rgb}{0.52 0.72 0.09}
 
-\colorlet{Source}{Green TU}
-\colorlet{Op}{Blue}
-\colorlet{Cut}{Dark orange}
-\colorlet{Sink}{Green}
+\colorlet{Source}{Green TU!20}
+\colorlet{Op}{Blue!20}
+\colorlet{Cut}{Dark orange!20}
+\colorlet{Sink}{Green!20}
+\colorlet{Text}{black}
+\colorlet{Line}{black!75}
 
 \tikzset{
   block/.style = {
     rectangle,
-    text width=10cm,
     text centered,
-    minimum height=1cm,
-    inner sep=1em,
+    execute at begin node={\begin{varwidth}{2.0in}\centering},
+    execute at end node={\end{varwidth}}
   },
   source/.style = {
     fill=Source,
     draw=Source,
-    text=white,
-    font=\bfseries
+    text=Text,
+    font=\bfseries,
   },
   op/.style = {
     fill=Op,
     draw=Op,
-    text=white
+    text=Text
   },
   cut/.style = {
     fill=Cut,
     draw=Cut,
-    text=white
+    text=Text
   },
   sink/.style = {
     fill=Sink,
     draw=Sink,
-    text=white,
-    font=\bfseries
+    text=Text,
+    font=\bfseries,
+  },
+  connect/.style = {
+    draw,
+    very thick,
+    color=Line,
+    -latex'
   }
 }
 
 \def\connect#1#2#3#4{
-  \draw [draw=#3, fill=#3] (#1.south west) -- ($(#1.south)!0.5!(#2.north)$) -- (#1.south east) -- cycle;
-  \fill [fill=#4] (#1.south west) -- (#2.north west) -- (#2.north east) -- (#1.south east) -- ($(#1.south)!0.5!(#2.north)$) -- cycle;
+  \path [connect] (#1) -- (#2);
+  %\draw [draw=#3, fill=#3] (#1.south west) -- ($(#1.south)!0.5!(#2.north)$) -- (#1.south east) -- cycle;
+  %\draw [draw=Line] (#1.south west) -- ($(#1.south)!0.5!(#2.north)$) -- (#1.south east);
+  %\fill [fill=#4] (#1.south west) -- (#2.north west) -- (#2.north east) -- (#1.south east) -- ($(#1.south)!0.5!(#2.north)$) -- cycle;
 }

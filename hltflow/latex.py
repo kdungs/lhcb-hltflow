@@ -30,7 +30,7 @@ def indent(spaces, multilinestring):
     return '\n{}'.format(indentation).join(multilinestring.split('\n'))
 
 
-def make_figure(sf, tikzoptions=''):
+def make_figure(sf, tikzoptions='node distance=0.5cm'):
     """ Generates a LaTeX figure from a given hltflow.core.StreamerFlowchart.
     Additionally, tikzoptions can be supplied manually.
     """
