@@ -42,7 +42,7 @@ lb-run Moore v23r7p5 python streamers.py
 The resulting file is used with this program via
 
 ```
-python3 hltflow.py -c hlt1streamers.json test > latex/flowchart.tex
+python3 hltflow.py -c hlt1streamers2015.json test > latex/flowchart.tex
 ```
 
 To compile the LaTeX file do
